@@ -1,8 +1,14 @@
 import Image from "next/image"
 import { Country } from "../types"
+import { ArrowLeft } from "@deemlol/next-icons";
+import { useTheme } from "next-themes";
+import countries from "i18n-iso-countries";
+import enLocale from 'i18n-iso-countries/langs/en.json';
 
 export const CountryInfo = (props: {country: Country, goBack: ()=> void}) => {
     const country = props.country;
+    const { theme } = useTheme();
+    countries.registerLocale(enLocale);
 
     const formatCapitals = (caps: string[]) => {
         return caps?.join(', ') || caps;
@@ -26,19 +32,28 @@ export const CountryInfo = (props: {country: Country, goBack: ()=> void}) => {
         return joined;
     }
 
-    return (
-        <div className='grid gap-8 px-8'>
-            <button className='cursor-pointer w-fit' onClick={props.goBack}>Go Back</button>
+    const black = '#000000';
+    const white = '#FFFFFF';
 
-            <Image
-                className='rounded-sm'
-                src={country.flags.svg}
-                width={500}
-                height={300}
-                alt={country.flags.alt || `flag of ${country.name.common}`}
-            />
+    return (
+        <div className='grid gap-8 px-8 justify-center'>
+            <button className='cursor-pointer w-fit bg-transparent dark:bg-secondary px-4 py-2 shadow-md flex gap-2 pe-6' onClick={props.goBack}>
+                <ArrowLeft size={24} color={theme == 'light' ? black : white} />
+                Go Back
+            </button>
+
+            <div className='max-w-[500px] h-auto'>
+                <Image
+                    className='rounded-sm'
+                    priority
+                    src={country.flags.svg}
+                    width={500}
+                    height={300}
+                    alt={country.flags.alt || `flag of ${country.name.common}`}
+                />
+            </div>
             
-            <div className='flex flex-col gap-y-8'>
+            <div className='flex flex-col gap-y-8 w-full max-w-[500px]'>
                 <h2 className='text-2xl text-start font-extrabold'>{country.name.common}</h2>
                 <div className='flex flex-col gap-y-3'>
                     <p><span className='font-bold'>Native Name: </span>{formatNativeName(country.name.nativeName)}</p>
@@ -54,9 +69,9 @@ export const CountryInfo = (props: {country: Country, goBack: ()=> void}) => {
                 </div>
                 <div className='flex flex-col gap-y-3'>
                     <p>Border Countries:</p>
-                    <div className='flex gap-4'>
+                    <div className='flex gap-4 flex-wrap'>
                         {country.borders?.length ? country.borders.map((border, index) => (
-                            <button key={index} className='bg-transparent dark:bg-secondary cursor-pointer px-8 py-1'>{border}</button>
+                            <div key={index} className='bg-transparent dark:bg-secondary px-8 py-1 shadow-sm'>{countries.getName(border, 'en')}</div>
                         )) : <p>None</p>}
                     </div>
                 </div>

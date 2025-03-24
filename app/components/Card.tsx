@@ -10,9 +10,10 @@ export const Card = (props: {country: Country, setCountry: (countryName: string)
 
     return (
         <button className='bg-transparent dark:bg-secondary cursor-pointer min-h-60 grid h-full rounded-sm max-w-70' onClick={()=>props.setCountry(country.name.common)}>
-          <div className='max-h-40 overflow-clip'>
+          <div className='max-h-40 w-auto overflow-clip'>
             <Image
                 className='rounded-t-sm'
+                priority
                 src={country.flags.svg}
                 width={500}
                 height={300}

@@ -13,7 +13,7 @@ export default async function Home() {
   }
 
   const all = await res.json();
-  console.log(all);
+  
 
   return (
     <>

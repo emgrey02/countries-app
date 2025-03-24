@@ -1,6 +1,7 @@
 import Image from "next/image"
+import { Country } from "../types"
 
-export const Card = (props: {country: any}) => {
+export const Card = (props: {country: Country, setCountry: (countryName: string)=>void}) => {
     const country = props.country;
 
     const formatPopulation = (pop: number) => {
@@ -28,7 +29,7 @@ export const Card = (props: {country: any}) => {
     }
 
     return (
-        <button className='bg-transparent dark:bg-secondary cursor-pointer min-h-60 grid h-full rounded-sm max-w-70'>
+        <button className='bg-transparent dark:bg-secondary cursor-pointer min-h-60 grid h-full rounded-sm max-w-70' onClick={()=>props.setCountry(country.name.common)}>
           <div className='max-h-40 overflow-clip'>
             <Image
                 className='rounded-t-sm'

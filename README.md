@@ -1,36 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Where in the world?
 
-## Getting Started
+A website that uses the REST Countries API to display country information.
 
-First, run the development server:
+The user can search for a country, filter countries by region, and see more info about a specific country.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech used
+- Nextjs
+- Tailwind
+- REST COUNTRIES api
+- Typescript
+- Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Some things I learned
+- using React context to fetch info once and store it to be used elsewhere
+- page transitions, specifically creating a skeleton card and having those show up as the page loads
+- utilized co-pilot for the first time
+- not using type 'any' anywhere!! which is why we use typescript in the first place...
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

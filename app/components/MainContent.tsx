@@ -1,25 +1,26 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CountryCards } from "./CountryCards"
-import { Search } from "@deemlol/next-icons";
-import { ChevronDown } from "@deemlol/next-icons"; 
-import { useTheme } from "next-themes";
 import { CountryInfo } from "./CountryInfo";
 import { Country } from "../types";
+import { SearchBar } from "./SearchBar";
+import { RegionFilter } from "./RegionFilter";
+import './transitions.css'; // Import the CSS file for transitions
 
 export const MainContent = (props: {allCountries: Country[]}) => {
-    const { theme } = useTheme();
-    const [selectedRegion, setSelectedRegion] = useState('No Filter');
     const [selectedCountry, setSelectedCountry] = useState<null | Country>(null);
     const [results, setResults] = useState(props.allCountries);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+ 
+    const setSelectedRegion = (region: string) => {
+        const selectedRegion = props.allCountries.filter((country: Country) => country.region === region);
+        setResults(selectedRegion);
+    }
 
-    useEffect(()=> {
-        if (selectedRegion !== 'No Filter') {
-            const res = props.allCountries.filter((country: Country) => country.region === selectedRegion);
-            setResults(res);
-        }
-    }, [selectedRegion, props.allCountries])
+    const setSearchResults = (res: string) => {
+        const searchResults = props.allCountries.filter((country: Country) => country.name.common.toLowerCase().includes(res.toLowerCase()));
+        setResults(searchResults);
+    }
 
     const setCountry = (countryName: string) => {
         const clickedCountry = props.allCountries.filter((country: Country) => countryName === country.name.common);
@@ -27,42 +28,36 @@ export const MainContent = (props: {allCountries: Country[]}) => {
     }
 
     const goBack = () => {
-        console.log('going back')
-        setSelectedCountry(null);
+        setIsTransitioning(true);
+        setTimeout(() => {
+            setSelectedCountry(null);
+            setResults(props.allCountries);
+            setIsTransitioning(false);
+        }, 200); // Match the duration of the CSS transition
     }
-
-    const black = '#000000';
-    const white = '#FFFFFF';
     
-
     return (
-        <>
-            <form className='flex gap-8 bg-transparent dark:bg-secondary m-4 mt-8 rounded-sm shadow-sm p-1'>
-                <div className='ps-4 py-2'>
-                    <Search size={24} color={theme == 'light' ? black : white} />
-                </div>
-                <input className='px-4 w-full' placeholder='Search for a country...' type="text" name="search" id="search" />
-                <label className='hidden' htmlFor="search">Search for a country...</label>
-            </form>
-            <div className='flex bg-transparent dark:bg-secondary w-fit rounded-sm ms-4 mb-8'>
-                <label className='hidden' htmlFor="filter">Filter by Region</label>
-                <div className='w-full grid grid-cols-1 rounded-sm px-2 py-1 cursor-pointer bg-transparent dark:bg-secondary shadow-sm' >
-                    <select className='col-start-1 row-start-1 appearance-none border-none w-full outline-none px-2 py-1 me-8 z-20 cursor-pointer' name="filter" id="filter" onClick={()=> setIsOpen(!isOpen)} value={selectedRegion} onChange={e => setSelectedRegion(e.target.value)}>
-                        <option className='dark:bg-secondary' value='No Filter' onClick={()=> setIsOpen(!isOpen)}>Filter by Region</option>
-                        <option className='dark:bg-secondary' value="Africa" onClick={()=> setIsOpen(!isOpen)}>Africa</option>
-                        <option className='dark:bg-secondary' value="Americas" onClick={()=> setIsOpen(!isOpen)}>America</option>
-                        <option className='dark:bg-secondary' value="Asia" onClick={()=> setIsOpen(!isOpen)}>Asia</option>
-                        <option className='dark:bg-secondary' value="Europe" onClick={()=> setIsOpen(!isOpen)}>Europe</option>
-                        <option className='dark:bg-secondary' value="Oceania" onClick={()=> setIsOpen(!isOpen)}>Oceania</option>
-                    </select>
-                    <div className={`col-start-1 row-start-1 z-10 place-self-end self-start py-1 px-2 transition ${isOpen && 'rotate-180'}`}>
-                        <ChevronDown size={24} color={theme == 'light' ? black : white} />
-                    </div>
-                </div>
+        <div className='grid gap-8 px-8 py-8'>
+            <div className={`transition-opacity duration-200 delay-200 ${selectedCountry && !isTransitioning ? 'opacity-0 invisible' : 'opacity-100 visible'}`}>
+                {!selectedCountry && (
+                    <>
+                        <div className='flex flex-col sm:flex-row justify-between sm:items-center gap-4 '>
+                            <SearchBar setSearch={setSearchResults} />
+                            <div className='flex bg-transparent dark:bg-secondary w-fit rounded-sm sm:mt-8 mb-8 '>
+                                <RegionFilter setSelectedRegion={setSelectedRegion}/>
+                            </div>
+                        </div>
+                        <div className=''>
+                            <CountryCards countries={results} setCountry={setCountry}/>
+                        </div>
+                    </>
+                )}
             </div>
-            <div className='flex justify-center p-8'>
-                {selectedCountry ? <CountryInfo country={selectedCountry} goBack={goBack} /> : <CountryCards countries={results} setCountry={setCountry}/>}
+            <div className={`transition-opacity duration-200 delay-200 ${selectedCountry && !isTransitioning ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                {selectedCountry && (
+                    <CountryInfo country={selectedCountry} goBack={goBack}/>
+                )}
             </div>
-        </>
+        </div>
     )
 }

@@ -36,8 +36,8 @@ export const CountryInfo = (props: {country: Country, goBack: ()=> void}) => {
     const white = '#FFFFFF';
 
     return (
-        <div className='grid gap-8'>
-            <button className='cursor-pointer w-fit bg-transparent dark:bg-secondary px-4 py-2 shadow-md flex gap-2 pe-6' onClick={props.goBack}>
+        <div className='grid gap-8 px-4 py-8 md:px-8 md:py-16 animate-fade-slide-in'>
+            <button className='cursor-pointer w-fit bg-transparent dark:bg-secondary px-4 py-2 shadow-md flex gap-2 pe-6 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors'  onClick={props.goBack}>
                 <ArrowLeft size={24} color={theme == 'light' ? black : white} />
                 Go Back
             </button>

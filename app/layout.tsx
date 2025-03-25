@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "./components/ThemeProvider";
+import { CountryProvider } from './context/CountryContext';
+import { ThemeToggle } from "./components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +30,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        <ThemeProvider attribute='class'>
-        {children}
+        <ThemeProvider>
+          <header className='flex justify-between py-8 px-4 bg-transparent dark:bg-secondary'>
+          <h1 className='font-bold text-xl'>Where in the world?</h1>
+          <ThemeToggle/>
+        </header>
+        <CountryProvider>
+          {children}
+        </CountryProvider>
         </ThemeProvider>
       </body>
     </html>
